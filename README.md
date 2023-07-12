@@ -13,6 +13,18 @@
   <a href="#-requirements">Requirements</a>
 </p>
 
+<p align="center">
+  <img  src="https://img.shields.io/static/v1?label=license&message=MIT&color=FFFFFF&labelColor=32B768" alt="License">
+  
+  <img src="https://img.shields.io/github/forks/salvatoreDeploy/API-Daily-Diet?label=forks&message=MIT&color=FFFFFF&labelColor=32B768" alt="Forks">
+
+  <img src="https://img.shields.io/github/stars/salvatoreDeploy/API-Daily-Diet?label=stars&message=MIT&color=FFFFFF&labelColor=32B768" alt="Stars">
+</p>
+
+<p align="center">
+  <img alt="Moveit" src=".github/images/cover.png">
+</p>
+
 ### RF - Requisitos Funcionais
 
 - [ ] Deve ser possivel criar um usuario
