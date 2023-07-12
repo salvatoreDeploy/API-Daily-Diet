@@ -25,6 +25,77 @@
   <img alt="Moveit" src=".github/images/cover.png">
 </p>
 
+### 🧪 Technologies
+
+This project was developed using the following technologies:
+
+- [Node.js](https://nodejs.org/en/)
+- [Fastify](https://www.fastify.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Prisma](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [JWT](https://jwt.io/)
+- [Vitest](https://vitest.dev/)
+
+## 🚀 Getting started
+
+Clone the project and access the folder
+
+```bash
+$ git clone https://github.com/JeffyMesquita/daily-diet-api.git && cd daily-diet-api
+```
+
+Follow the steps below
+
+```bash
+# Install the dependencies
+$ npm install
+
+# Create a .env file and fill it with the environment variables from .env.example
+
+# Start database in Docker
+$ docker-compose up -d
+
+# Create the database
+$ npx prisma migrate dev
+
+$ npx prisma generate
+
+
+# Start the project
+$ npm run start:dev
+
+# The server will start at port 3333 - go to http://localhost:3333
+
+# In Folder insomnia you can find the insomnia file to test the API
+
+# Run tests
+$ npm run test
+
+or
+
+$ npm run test:watch
+
+and
+
+$ npm run pretest:e2e && npm run test:e2e
+
+or
+
+$ npm run test:e2e:watch
+
+```
+
+## 💻 Project
+
+## 🔖 Layout
+
+## 📝 License
+
+---
+
+## 📋 Requirements
+
 ### RF - Requisitos Funcionais
 
 - [ ] Deve ser possivel criar um usuario
