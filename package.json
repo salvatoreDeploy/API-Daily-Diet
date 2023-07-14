@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/salvatoreDeploy/API-Daily-Diet#readme",
   "dependencies": {
+    "@fastify/cookie": "^8.3.0",
     "dotenv": "^16.3.1",
     "fastify": "^4.19.2",
     "knex": "^2.5.0",

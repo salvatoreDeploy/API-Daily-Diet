@@ -98,7 +98,7 @@ $ npm run test:e2e:watch
 
 ### RF - Requisitos Funcionais
 
-- [ ] Deve ser possivel criar um usuario
+- [ X ] Deve ser possivel criar um usuario
 - [ ] Deve ser possivel identificar o usuario entre as requisições
 - [ ] Deve ser possivel registrar uma refeição feita, com as seguintes informações:
   - Nome
