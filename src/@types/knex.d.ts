@@ -15,7 +15,7 @@ declare module 'knex/types/tables' {
     }
     meals: {
       id: string
-      userId: string
+      userId?: string
       name: string
       description: string
       date: string
