@@ -24,6 +24,15 @@ const mealBodySchema = z.object({
   userId: z.string(),
 }) */
 
+const mealParamsSchema = z.object({
+  id: z
+    .string({
+      required_error: 'id is required.',
+      invalid_type_error: 'id must be a string.',
+    })
+    .uuid('id must be an valid uuid.'),
+})
+
 export async function mealsRoutes(app: FastifyInstance) {
   app.post('/', async (request, reply) => {
     const { name, description, date, time, isInDiet } = mealBodySchema.parse(
@@ -45,5 +54,25 @@ export async function mealsRoutes(app: FastifyInstance) {
     })
 
     return reply.status(201).send({ message: 'Successfully created meal!' })
+  })
+
+  app.put('/:id', async (request, reply) => {
+    const { name, description, date, time, isInDiet } = mealBodySchema.parse(
+      request.body,
+    )
+
+    const { id } = mealParamsSchema.parse(request.params)
+    const sessionId = request.cookies.sessionId
+
+    const meal = await knex('meals').where({ id, userId: sessionId }).update({
+      name,
+      description,
+      date,
+      time,
+      isInDiet,
+      updated_at: new Date().toISOString(),
+    })
+
+    return reply.status(202).send({ message: 'Successfully edited meal!' })
   })
 }
