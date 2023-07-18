@@ -75,4 +75,15 @@ export async function mealsRoutes(app: FastifyInstance) {
 
     return reply.status(202).send({ message: 'Successfully edited meal!' })
   })
+
+  app.get('/', async (request, reply) => {
+    const sessionId = request.cookies.sessionId
+
+    const meals = await knex('meals')
+      .where({ userId: sessionId })
+      .orderBy('date', 'desc')
+      .select('*')
+
+    return reply.status(200).send({ meals })
+  })
 }

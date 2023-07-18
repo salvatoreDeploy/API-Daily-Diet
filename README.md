@@ -98,14 +98,14 @@ $ npm run test:e2e:watch
 
 ### RF - Requisitos Funcionais
 
-- [X] Deve ser possivel criar um usuario
-- [X] Deve ser possivel identificar o usuario entre as requisições
-- [ ] Deve ser possivel registrar uma refeição feita, com as seguintes informações:
+- [x] Deve ser possivel criar um usuario
+- [x] Deve ser possivel identificar o usuario entre as requisições
+- [x] Deve ser possivel registrar uma refeição feita, com as seguintes informações:
   - Nome
   - Descrição
   - Data e Hora
   - Estar dentro ou não dieta
-- [ ] Deve ser possivel editar uma refeição, podendo lterar todos dados a cima
+- [x] Deve ser possivel editar uma refeição, podendo alterar todos dados a cima
 - [ ] Deve ser possivel listar todas as refeições de usuario
 - [ ] Deve ser possivel visualizar uma unica refeição
 - [ ] Deve ser posivel recuperar as métricas de um usuario

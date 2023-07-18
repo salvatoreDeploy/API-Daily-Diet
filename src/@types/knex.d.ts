@@ -7,11 +7,10 @@ declare module 'knex/types/tables' {
   export interface Tables {
     users: {
       id: string
-      name: string
+      username: string
       email: string
-      password: string
-      created_at: string
       sessionId?: string
+      created_at: string
     }
     meals: {
       id: string
