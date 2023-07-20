@@ -12,9 +12,9 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp('updated_at').defaultTo(null)
 
     table
-      .uuid('userId')
+      .uuid('user_id')
       .unsigned()
-      .references('users.sessionId')
+      .references('users.id')
       .onDelete('CASCADE')
       .onDelete('CASCADE')
   })

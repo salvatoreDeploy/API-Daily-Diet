@@ -12,17 +12,6 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const { username, email } = createUserBodySchema.parse(request.body)
 
-    /* let sessionId = request.cookies.sessionId
-
-    if (!sessionId) {
-      sessionId = randomUUID()
-
-      reply.cookie('sessionId', sessionId, {
-        path: '/',
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 Dias
-      })
-    } */
-
     await knex('users').insert({
       id: randomUUID(),
       username,
@@ -53,19 +42,6 @@ export async function usersRoutes(app: FastifyInstance) {
     const user = await knex('users').where({ email, username }).first()
 
     if (user) {
-      let sessionId = request.cookies.sessionId
-
-      if (!sessionId) {
-        sessionId = randomUUID()
-
-        reply.cookie('sessionId', sessionId, {
-          path: '/',
-          maxAge: 1000 * 60 * 60 * 24 * 7, // 7 Dias
-        })
-
-        await knex('users').where({ email }).update('sessionId', sessionId)
-      }
-
       return reply.status(200).send({ message: 'Login successful!' })
     } else {
       return reply.status(401).send({ message: 'Invalid credentials' })

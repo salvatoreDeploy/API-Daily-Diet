@@ -20,9 +20,9 @@ const mealBodySchema = z.object({
   isInDiet: z.boolean(),
 })
 
-/* const userQuerySchema = z.object({
+const userQuerySchema = z.object({
   userId: z.string(),
-}) */
+})
 
 const mealParamsSchema = z.object({
   id: z
@@ -39,9 +39,7 @@ export async function mealsRoutes(app: FastifyInstance) {
       request.body,
     )
 
-    // const { userId } = userQuerySchema.parse(request.query)
-
-    const sessionId = request.cookies.sessionId
+    const { userId } = userQuerySchema.parse(request.query)
 
     await knex('meals').insert({
       id: randomUUID(),
@@ -50,7 +48,7 @@ export async function mealsRoutes(app: FastifyInstance) {
       date,
       time,
       isInDiet,
-      userId: sessionId,
+      user_id: userId,
     })
 
     return reply.status(201).send({ message: 'Successfully created meal!' })
@@ -62,9 +60,9 @@ export async function mealsRoutes(app: FastifyInstance) {
     )
 
     const { id } = mealParamsSchema.parse(request.params)
-    const sessionId = request.cookies.sessionId
+    const { userId } = userQuerySchema.parse(request.query)
 
-    const meal = await knex('meals').where({ id, userId: sessionId }).update({
+    await knex('meals').where({ id, user_id: userId }).update({
       name,
       description,
       date,
@@ -77,12 +75,21 @@ export async function mealsRoutes(app: FastifyInstance) {
   })
 
   app.get('/', async (request, reply) => {
-    const sessionId = request.cookies.sessionId
+    const { userId } = userQuerySchema.parse(request.query)
 
     const meals = await knex('meals')
-      .where({ userId: sessionId })
+      .where({ user_id: userId })
       .orderBy('date', 'desc')
       .select('*')
+
+    return reply.status(200).send({ meals })
+  })
+
+  app.get('/:id', async (request, reply) => {
+    const { id } = mealParamsSchema.parse(request.params)
+    const { userId } = userQuerySchema.parse(request.query)
+
+    const meals = await knex('meals').where({ id, user_id: userId }).first()
 
     return reply.status(200).send({ meals })
   })

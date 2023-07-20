@@ -106,8 +106,8 @@ $ npm run test:e2e:watch
   - Data e Hora
   - Estar dentro ou não dieta
 - [x] Deve ser possivel editar uma refeição, podendo alterar todos dados a cima
-- [ ] Deve ser possivel listar todas as refeições de usuario
-- [ ] Deve ser possivel visualizar uma unica refeição
+- [x] Deve ser possivel listar todas as refeições de usuario
+- [X] Deve ser possivel visualizar uma unica refeição
 - [ ] Deve ser posivel recuperar as métricas de um usuario
   - Quantidade total de refeições registradas
   - Quantidade total de refeições dentro da dieta
@@ -122,4 +122,3 @@ $ npm run test:e2e:watch
 ### RF - Requisitos Funcionais
 
 - [ ] Utilização de banco de dados para armazenamento das informações do usuário e das refeições
-- [ ] Utilização de autenticação por token para identificar o usuário entre as requisições
