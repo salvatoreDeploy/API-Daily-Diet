@@ -12,7 +12,7 @@ export function isTimeWithinCurrentDate(
   const inputDate = new Date(
     Number(currentYear),
     Number(currentMonth) - 1,
-    Number(currentDay),
+    Number(currentDay) - 1,
     Number(hour),
     Number(minute),
   )

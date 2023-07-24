@@ -1,10 +1,10 @@
-export function isDatePast(date: string) {
-  const [day, month, year] = date.split('/').map(Number)
+export function isDatePast(value: string): boolean {
+  const [day, month, year] = value.split('/').map(Number)
   const providedDate = new Date(year, month - 1, day)
   const currentDate = new Date()
 
   const timeZoneOffSetTimeMinutes = currentDate.getTimezoneOffset()
   currentDate.setMinutes(currentDate.getMinutes() - timeZoneOffSetTimeMinutes)
 
-  console.log(providedDate <= currentDate)
+  return providedDate <= currentDate
 }

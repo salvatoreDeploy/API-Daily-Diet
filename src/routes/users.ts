@@ -2,24 +2,29 @@ import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { knex } from '../../db'
 import { randomUUID } from 'crypto'
+import { checkUserAlreadyExists } from '../middlewares/checkUserAlreadyExists'
 
 export async function usersRoutes(app: FastifyInstance) {
-  app.post('/signup', async (request, reply) => {
-    const createUserBodySchema = z.object({
-      username: z.string(),
-      email: z.string().email(),
-    })
+  app.post(
+    '/signup',
+    { preHandler: checkUserAlreadyExists },
+    async (request, reply) => {
+      const createUserBodySchema = z.object({
+        username: z.string(),
+        email: z.string().email(),
+      })
 
-    const { username, email } = createUserBodySchema.parse(request.body)
+      const { username, email } = createUserBodySchema.parse(request.body)
 
-    await knex('users').insert({
-      id: randomUUID(),
-      username,
-      email,
-    })
+      await knex('users').insert({
+        id: randomUUID(),
+        username,
+        email,
+      })
 
-    return reply.status(201).send({ message: 'Successfully created user!' })
-  })
+      return reply.status(201).send({ message: 'Successfully created user!' })
+    },
+  )
 
   app.post('/signin', async (request, reply) => {
     const authenticateUserBodySchema = z.object({

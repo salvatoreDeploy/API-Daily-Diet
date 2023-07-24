@@ -1,8 +1,12 @@
 import { randomUUID } from 'crypto'
-import { FastifyInstance } from 'fastify'
+import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 import { z } from 'zod'
 import { knex } from '../../db'
+import { checkMealExists } from '../middlewares/checkMealExists'
+import { checkIdUserExists } from '../middlewares/checkIdUserExists'
+import { mealBodyValidation } from '../middlewares/mealBodyValidation'
+import { mealsMetrics } from '../utils/mealMetrics'
 
 interface Metrics {
   inDietPercentage: number
@@ -34,47 +38,55 @@ const mealParamsSchema = z.object({
 })
 
 export async function mealsRoutes(app: FastifyInstance) {
-  app.post('/', async (request, reply) => {
-    const { name, description, date, time, isInDiet } = mealBodySchema.parse(
-      request.body,
-    )
+  app.post(
+    '/',
+    { preHandler: [checkIdUserExists, mealBodyValidation] },
+    async (request, reply) => {
+      const { name, description, date, time, isInDiet } = mealBodySchema.parse(
+        request.body,
+      )
 
-    const { userId } = userQuerySchema.parse(request.query)
+      const { userId } = userQuerySchema.parse(request.query)
 
-    await knex('meals').insert({
-      id: randomUUID(),
-      name,
-      description,
-      date,
-      time,
-      isInDiet,
-      user_id: userId,
-    })
+      await knex('meals').insert({
+        id: randomUUID(),
+        name,
+        description,
+        date,
+        time,
+        isInDiet,
+        user_id: userId,
+      })
 
-    return reply.status(201).send({ message: 'Successfully created meal!' })
-  })
+      return reply.status(201).send({ message: 'Successfully created meal!' })
+    },
+  )
 
-  app.put('/:id', async (request, reply) => {
-    const { name, description, date, time, isInDiet } = mealBodySchema.parse(
-      request.body,
-    )
+  app.put(
+    '/:id',
+    { preHandler: [checkMealExists, checkIdUserExists, mealBodyValidation] },
+    async (request, reply) => {
+      const { name, description, date, time, isInDiet } = mealBodySchema.parse(
+        request.body,
+      )
 
-    const { id } = mealParamsSchema.parse(request.params)
-    const { userId } = userQuerySchema.parse(request.query)
+      const { id } = mealParamsSchema.parse(request.params)
+      const { userId } = userQuerySchema.parse(request.query)
 
-    await knex('meals').where({ id, user_id: userId }).update({
-      name,
-      description,
-      date,
-      time,
-      isInDiet,
-      updated_at: new Date().toISOString(),
-    })
+      await knex('meals').where({ id, user_id: userId }).update({
+        name,
+        description,
+        date,
+        time,
+        isInDiet,
+        updated_at: new Date().toISOString(),
+      })
 
-    return reply.status(202).send({ message: 'Successfully edited meal!' })
-  })
+      return reply.status(202).send({ message: 'Successfully edited meal!' })
+    },
+  )
 
-  app.get('/', async (request, reply) => {
+  app.get('/', { preHandler: checkIdUserExists }, async (request, reply) => {
     const { userId } = userQuerySchema.parse(request.query)
 
     const meals = await knex('meals')
@@ -85,7 +97,7 @@ export async function mealsRoutes(app: FastifyInstance) {
     return reply.status(200).send({ meals })
   })
 
-  app.get('/:id', async (request, reply) => {
+  app.get('/:id', { preHandler: checkIdUserExists }, async (request, reply) => {
     const { id } = mealParamsSchema.parse(request.params)
     const { userId } = userQuerySchema.parse(request.query)
 
@@ -93,4 +105,41 @@ export async function mealsRoutes(app: FastifyInstance) {
 
     return reply.status(200).send({ meals })
   })
+
+  app.delete(
+    '/:id',
+    { preHandler: [checkMealExists, checkIdUserExists] },
+    async (request, reply) => {
+      const { id } = mealParamsSchema.parse(request.params)
+      const { userId } = userQuerySchema.parse(request.query)
+
+      const result = await knex('meals').where({ id, user_id: userId }).delete()
+
+      if (result === 0) {
+        return reply
+          .status(404)
+          .send({ message: 'Meal not found or user does not have permission.' })
+      }
+
+      return reply.status(200).send({ message: 'Meal deleted' })
+    },
+  )
+
+  app.get(
+    '/metrics',
+    {},
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const { userId } = userQuerySchema.parse(request.query)
+
+      const meals = await knex('meals').where({ user_id: userId }).select('*')
+
+      if (!meals) {
+        return reply.status(400).send({ message: 'Not found' })
+      }
+
+      const metricsMeals = mealsMetrics(meals)
+
+      return reply.status(200).send({ metricsMeals })
+    },
+  )
 }
