@@ -27,6 +27,6 @@ export async function checkUserAlreadyExists(
   const userExists = await knex('users').where({ email }).first()
 
   if (userExists) {
-    return reply.status(400).send({ messaage: 'Email already exists' })
+    return reply.status(400).send({ message: 'Email already exists' })
   }
 }
