@@ -13,7 +13,7 @@ describe('Users Route', () => {
   })
 
   beforeEach(() => {
-    execSync('npm run knex migrate:rollback --all')
+    execSync('npm run knex migrate:rollback')
     execSync('npm run knex migrate:latest')
   })
 
@@ -28,9 +28,7 @@ describe('Users Route', () => {
       .send(user)
       .expect(201)
 
-    expect(response.body).contain({
-      message: 'Successfully created user!',
-    })
+    expect(response.body.user.id).toEqual(expect.any(String))
   })
 
   it('Should be able to login user', async () => {

@@ -10,7 +10,8 @@
     "dev": "tsx watch src/server.ts",
     "eslint": "eslint src --ext .ts --fix",
     "knex": "node --no-warnings --loader tsx ./node_modules/.bin/knex",
-    "test": "vitest"
+    "test": "vitest run --dir test",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",

@@ -32,9 +32,7 @@ This project was developed using the following technologies:
 - [Node.js](https://nodejs.org/en/)
 - [Fastify](https://www.fastify.io/)
 - [TypeScript](https://www.typescriptlang.org/)
-- [Prisma](https://www.prisma.io/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [JWT](https://jwt.io/)
+- [Knex](https://knexjs.org/)
 - [Vitest](https://vitest.dev/)
 
 ## 🚀 Getting started
@@ -42,7 +40,7 @@ This project was developed using the following technologies:
 Clone the project and access the folder
 
 ```bash
-$ git clone https://github.com/JeffyMesquita/daily-diet-api.git && cd daily-diet-api
+$ git clone https://github.com/salvatoreDeploy/API-Daily-Diet.git && cd API-Daily-Diet
 ```
 
 Follow the steps below
@@ -53,14 +51,8 @@ $ npm install
 
 # Create a .env file and fill it with the environment variables from .env.example
 
-# Start database in Docker
-$ docker-compose up -d
-
 # Create the database
-$ npx prisma migrate dev
-
-$ npx prisma generate
-
+$ npm run knex -- migrate:latest
 
 # Start the project
 $ npm run start:dev
@@ -75,14 +67,6 @@ $ npm run test
 or
 
 $ npm run test:watch
-
-and
-
-$ npm run pretest:e2e && npm run test:e2e
-
-or
-
-$ npm run test:e2e:watch
 
 ```
 
@@ -107,8 +91,8 @@ $ npm run test:e2e:watch
   - Estar dentro ou não dieta
 - [x] Deve ser possivel editar uma refeição, podendo alterar todos dados a cima
 - [x] Deve ser possivel listar todas as refeições de usuario
-- [X] Deve ser possivel visualizar uma unica refeição
-- [ ] Deve ser posivel recuperar as métricas de um usuario
+- [x] Deve ser possivel visualizar uma unica refeição
+- [x] Deve ser posivel recuperar as métricas de um usuario
   - Quantidade total de refeições registradas
   - Quantidade total de refeições dentro da dieta
   - Quantidade total de refeições fora da dieta
@@ -116,9 +100,9 @@ $ npm run test:e2e:watch
 
 ### RN - Regras de Negocio
 
-- [ ] As Refeicões devem ser relacionados a um usuario
-- [ ] O usuario só pode visualizar, editar e apagar as refeições o qual ele criou
+- [x] As Refeicões devem ser relacionados a um usuario
+- [x] O usuario só pode visualizar, editar e apagar as refeições o qual ele criou
 
 ### RF - Requisitos Funcionais
 
-- [ ] Utilização de banco de dados para armazenamento das informações do usuário e das refeições
+- [x] Utilização de banco de dados para armazenamento das informações do usuário e das refeições

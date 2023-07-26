@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 
 import { z } from 'zod'
 import { knex } from '../../db'
@@ -48,17 +48,19 @@ export async function mealsRoutes(app: FastifyInstance) {
 
       const { userId } = userQuerySchema.parse(request.query)
 
-      await knex('meals').insert({
-        id: randomUUID(),
-        name,
-        description,
-        date,
-        time,
-        isInDiet,
-        user_id: userId,
-      })
+      const meal = await knex('meals')
+        .insert({
+          id: randomUUID(),
+          name,
+          description,
+          date,
+          time,
+          isInDiet,
+          user_id: userId,
+        })
+        .returning('*')
 
-      return reply.status(201).send({ message: 'Successfully created meal!' })
+      return reply.status(201).send({ meal: meal[0] })
     },
   )
 
@@ -73,16 +75,19 @@ export async function mealsRoutes(app: FastifyInstance) {
       const { id } = mealParamsSchema.parse(request.params)
       const { userId } = userQuerySchema.parse(request.query)
 
-      await knex('meals').where({ id, user_id: userId }).update({
-        name,
-        description,
-        date,
-        time,
-        isInDiet,
-        updated_at: new Date().toISOString(),
-      })
+      const meal = await knex('meals')
+        .where({ id, user_id: userId })
+        .update({
+          name,
+          description,
+          date,
+          time,
+          isInDiet,
+          updated_at: new Date().toISOString(),
+        })
+        .returning('*')
 
-      return reply.status(202).send({ message: 'Successfully edited meal!' })
+      return reply.status(202).send({ meal: meal[0] })
     },
   )
 
@@ -101,9 +106,9 @@ export async function mealsRoutes(app: FastifyInstance) {
     const { id } = mealParamsSchema.parse(request.params)
     const { userId } = userQuerySchema.parse(request.query)
 
-    const meals = await knex('meals').where({ id, user_id: userId }).first()
+    const meal = await knex('meals').where({ id, user_id: userId }).first()
 
-    return reply.status(200).send({ meals })
+    return reply.status(200).send({ meal })
   })
 
   app.delete(
